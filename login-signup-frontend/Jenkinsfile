@@ -16,8 +16,9 @@ node {
             sudo mkdir -p ${appDir}
             sudo chown -R jenkins:jenkins ${appDir}
 
-            # Ab hum 'login-signup-frontend' ke andar hi hain, toh sync yaha se hoga
-            rsync -av --delete --exclude='.git' --exclude='node_modules' ./login-signup-frontend/ ${appDir}/
+            # Chunki hum already login-signup-frontend folder ke andar hain, 
+            # isliye hum current directory (./) se copy karenge.
+            rsync -av --delete --exclude='.git' --exclude='node_modules' ./ ${appDir}/
             
             cd ${appDir}
             npm install
