@@ -4,6 +4,7 @@ function LandingPage() {
     return (
         <div class="container mt-5 d-flex justify-content-center">
             <div class="card p-3" style={{ width: "500px", height: "600px", border: "2px solid black" }}>
+                
                 <div style={{ marginTop: "50%" }}>
                  <h1>This is my aws testing</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, doloremque.</p>
