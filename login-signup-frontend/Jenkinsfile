@@ -1,84 +1,36 @@
-node{
-    def appDir='/var/www/reactjs-app'
+node {
+    def appDir = '/var/www/reactjs-app'
+    
     stage('Clean Workspace') {
         deleteDir()
     }
-    stage('Clone Repo'){
+
+    stage('Clone Repo') {
         echo 'Cloning repository...'
-        git (
-            branch: 'main',
-            url: 'https://github.com/rachnarajaka040/cicd-jenkins-aws.git'
-        )
+        git branch: 'main', url: 'https://github.com/rachnarajaka040/cicd-jenkins-aws.git'
     }
-    stage('Deploy to Ec2') {
+
+    stage('Deploy to EC2') {
         echo 'Deploying to EC2...'
         sh """
-           sudo mkdir -p ${appDir}
-           sudo chown -R 
-           jenkins:jenkins ${appDir}
+            # Create directory and set permissions
+            sudo mkdir -p ${appDir}
+            sudo chown -R jenkins:jenkins ${appDir}
 
-           rsync -av --delete 
-           --exclude='.git'
-            --exclude='node_modules'.
-             / ${appDir}/
-             cd ${appDir}
-             sudo npm install
-             sudo npm run build
-             sudo fuser -k 3000/tcp ||
-             true
-             npm run start 
+            # Sync files (Corrected path from . / to ./)
+            rsync -av --delete --exclude='.git' --exclude='node_modules' ./ ${appDir}/
+            
+            cd ${appDir}
 
+            # Install and Build
+            npm install
+            npm run build --if-present
+
+            # Kill existing process on port 3000 to allow restart
+            sudo fuser -k 3000/tcp || true
+
+            # Start the app in the background so Jenkins can finish
+            BUILD_ID=dontKillMe nohup npm start > /dev/null 2>&1 &
         """
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// pipeline {
-//     agent any
-
-//     environment {
-//         VERCEL_TOKEN = credentials('vercel_token')
-//     }
-
-//     stages {
-//         stage('Install') {
-//             steps {
-//                 bat 'npm install'
-//             }
-//         }
-
-//         stage('Test') {
-//             steps {
-//                 echo 'Skipping test'
-//             }
-//         }
-
-//         stage('Build') {
-//             steps {
-//                 bat 'npm run build'
-//             }
-//         }
-
-//         stage('Deploy') {
-//             steps {
-//                 bat "npx vercel --prod --yes --token=%VERCEL_TOKEN%"
-//             }
-//         }
-//     }
-// }
