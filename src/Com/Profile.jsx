@@ -16,7 +16,7 @@ function Profile() {
                 <h3>Account Settings</h3>
                 <div class="d-flex align-items-center">
                     <div class="image">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Image" class="rounded" width="155" />
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="" class="rounded" width="155" />
                     </div>
 
                     <div class="ml-3 w-100">
