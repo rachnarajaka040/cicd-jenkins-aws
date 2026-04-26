@@ -7,23 +7,25 @@ node {
 
     stage('Clone Repo') {
         echo 'Cloning repository...'
-        git branch: 'main', url: 'https://github.com/rachnarajaka040/cicd-jenkins-aws/tree/main/login-signup-frontend'
+        git branch: 'main', url: 'https://github.com/rachnarajaka040/cicd-jenkins-aws.git'
     }
 
- stage('Deploy to Ec2') {
-    echo 'Deploying to EC2...'
-    sh """
-        sudo mkdir -p ${appDir}
-        sudo chown -R jenkins:jenkins ${appDir}
+    stage('Deploy to Ec2') {
+        echo 'Deploying to EC2...'
+        sh """
+            sudo mkdir -p ${appDir}
+            sudo chown -R jenkins:jenkins ${appDir}
 
-        # Notice we are syncing FROM the subfolder now
-        rsync -av --delete --exclude='.git' --exclude='node_modules' ./login-signup-frontend/ ${appDir}/
-        
-        cd ${appDir}
-        npm install
-        npm run build
-        sudo fuser -k 3000/tcp || true
-        BUILD_ID=dontKillMe nohup npm start > /dev/null 2>&1 &
-    """
-}
+            # Ab hum 'login-signup-frontend' ke andar hi hain, toh sync yaha se hoga
+            rsync -av --delete --exclude='.git' --exclude='node_modules' ./login-signup-frontend/ ${appDir}/
+            
+            cd ${appDir}
+            npm install
+            npm run build --if-present
+
+            sudo fuser -k 3000/tcp || true
+            export JENKINS_NODE_COOKIE=dontKillMe
+            nohup npm start > /dev/null 2>&1 &
+        """
+    }
 }
