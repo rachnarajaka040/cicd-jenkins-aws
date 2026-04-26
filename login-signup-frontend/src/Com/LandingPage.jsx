@@ -5,9 +5,7 @@ function LandingPage() {
         <div class="container mt-5 d-flex justify-content-center">
             <div class="card p-3" style={{ width: "500px", height: "600px", border: "2px solid black" }}>
                 <div style={{ marginTop: "50%" }}>
-
-
-                    <h1>This is my aws testing</h1>
+                <h1>This is my aws testing</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, doloremque.</p>
                     <div class="d-grid gap-2 col-2 mx-auto" style={{ width: "18rem" }}>
                         <Link to="/signup"><button class="btn btn-primary w-100" type="button">Create Account</button></Link>
